@@ -7,33 +7,31 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 24,
-            left: 24
+      body: SafeArea(
+          child: Padding(
+        padding: EdgeInsets.symmetric(vertical: edge),
+        child: ListView(
+          children: [
+          Padding(
+            padding: EdgeInsets.only(left: edge),
+            child: Text(
+              "Explore Now",
+              style: blackTextStyle.copyWith(fontSize: 24),
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Explore Now",style: blackTextStyle.copyWith(
-                fontSize: 24
-              ),),
-              SizedBox(
-                height: 2,
-              ),
-              Text("Mecari kosan yang cozy",style: greyTextStyle.copyWith(
-                fontSize: 16
-              ),),
-              SizedBox(
-                height: 30,
-              ),
-              Text("Populer Cities",style: blackTextStyle.copyWith(
-                fontSize: 16
-              ),)
-            ],
+          SizedBox(
+            height: 2,
           ),
-        ),
+          Padding(
+            padding: EdgeInsets.only(left: edge),
+            child: Text("Mencari kosan yang cozy",style: greyTextStyle.copyWith(
+              fontSize: 16
+            ),),
+            ),
+            SizedBox(
+              height: 30,
+            )
+        ]),
       )),
     );
   }
