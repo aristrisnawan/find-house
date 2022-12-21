@@ -1,8 +1,10 @@
+import 'package:find_house/models/space.dart';
 import 'package:find_house/theme.dart';
 import 'package:flutter/material.dart';
 
 class SpaceCard extends StatelessWidget {
-  const SpaceCard({super.key});
+  final Space space;
+  const SpaceCard(this.space);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class SpaceCard extends StatelessWidget {
             child: Stack(
               children: [
                 Image.asset(
-                  "assets/image/space1.png",
+                  space.imageUrl,
                   height: 110,
                   width: 130,
                   fit: BoxFit.cover,
@@ -40,7 +42,7 @@ class SpaceCard extends StatelessWidget {
                           width: 22,
                         ),
                         Text(
-                          "4/5",
+                          '${space.rating}/5',
                           style: whiteTextStyle.copyWith(fontSize: 13),
                         )
                       ],
@@ -59,7 +61,7 @@ class SpaceCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Kuratakeso Hott",
+              space.name,
               style: blackTextStyle.copyWith(fontSize: 18),
             ),
             SizedBox(
@@ -67,7 +69,7 @@ class SpaceCard extends StatelessWidget {
             ),
             Text.rich(
               TextSpan(
-                  text: "53",
+                  text: '\$ ${space.price}',
                   style: purpleTextStyle.copyWith(fontSize: 16),
                   children: [
                     TextSpan(
@@ -79,7 +81,7 @@ class SpaceCard extends StatelessWidget {
               height: 16,
             ),
             Text(
-              "Bandung, Germany",
+              "${space.city}, ${space.country}",
               style: greyTextStyle.copyWith(fontSize: 14),
             )
           ],
