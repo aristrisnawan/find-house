@@ -2,6 +2,7 @@ import 'package:find_house/models/city.dart';
 import 'package:find_house/models/space.dart';
 import 'package:find_house/models/tips.dart';
 import 'package:find_house/theme.dart';
+import 'package:find_house/widgets/bottom_navbar_item.dart';
 import 'package:find_house/widgets/city_card.dart';
 import 'package:find_house/widgets/space_card.dart';
 import 'package:find_house/widgets/tips_card.dart';
@@ -16,7 +17,7 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
           bottom: false,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: edge),
+            padding: EdgeInsets.symmetric(horizontal: edge),
             child: ListView(children: [
               Padding(
                 padding: EdgeInsets.only(left: edge),
@@ -171,9 +172,43 @@ class HomePage extends StatelessWidget {
                           title: "Jakarta Fairship",
                           updated: "11 Dec")),
                     ],
-                  ))
+                  )),
+              SizedBox(
+                height: 90,
+              ),
             ]),
           )),
+          floatingActionButton: Container(
+                height: 65,
+                width: MediaQuery.of(context).size.width - (2 * edge),
+                margin: EdgeInsets.symmetric(horizontal: edge),
+                decoration: BoxDecoration(
+                  color: Color(0xffF6F7F8),
+                  borderRadius: BorderRadius.circular(23)
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    BottomNavbar(
+                      imgUrl: 'assets/image/Icon_home_solid.png',
+                      isActive: true,
+                    ),
+                    BottomNavbar(
+                      imgUrl: 'assets/image/Icon_mail_solid.png',
+                      isActive: false,
+                    ),
+                    BottomNavbar(
+                      imgUrl: 'assets/image/Icon_card_solid.png',
+                      isActive: false,
+                    ),
+                    BottomNavbar(
+                      imgUrl: 'assets/image/Icon_love_solid.png',
+                      isActive: false,
+                    ),
+                  ],
+                ),
+              ),
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
