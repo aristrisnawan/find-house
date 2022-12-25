@@ -1,10 +1,15 @@
 import 'package:find_house/theme.dart';
 import 'package:find_house/widgets/facility_item.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});
-
+  Future<void> _launchUrl(Uri url) async {
+  if (!await launchUrl(url)) {
+    throw 'Could not launch $url';
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,26 +23,6 @@ class DetailPage extends StatelessWidget {
               height: 350,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: edge, vertical: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Image.asset(
-                        "assets/image/btn_back.png",
-                        width: 40,
-                      )),
-                  Image.asset(
-                    "assets/image/btn_wishlist.png",
-                    width: 40,
-                  ),
-                ],
-              ),
             ),
             ListView(
               children: [
@@ -129,6 +114,7 @@ class DetailPage extends StatelessWidget {
                           style: reulerTextStyle.copyWith(fontSize: 16),
                         ),
                       ),
+                      // ignore: prefer_const_constructors
                       SizedBox(
                         height: 12,
                       ),
@@ -154,11 +140,153 @@ class DetailPage extends StatelessWidget {
                                 count: 3),
                           ],
                         ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      // NOTE : PHOTOS
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: edge),
+                        child: Text(
+                          "Photos",
+                          style: reulerTextStyle.copyWith(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: edge),
+                        child: Container(
+                          height: 88,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.asset(
+                                  "assets/image/photo1.png",
+                                  width: 110,
+                                  height: 88,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 18,
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.asset(
+                                  "assets/image/photo2.png",
+                                  width: 110,
+                                  height: 88,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 18,
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.asset(
+                                  "assets/image/photo3.png",
+                                  width: 110,
+                                  height: 88,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       )
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: edge),
+                  child: Text(
+                    "Location",
+                    style: reulerTextStyle.copyWith(fontSize: 16),
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                // NOTE : LOCATION
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: edge),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Jln. Kappan Sukses No. 20 \nBandung",
+                        style: reulerTextStyle.copyWith(
+                            fontSize: 14, color: Color(0xff7A7E86)),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _launchUrl(Uri.parse('https://www.google.co.id/maps/place/Bandung,+Kota+Bandung,+Jawa+Barat/@-6.9032739,107.5729445,12z/data=!3m1!4b1!4m5!3m4!1s0x2e68e6398252477f:0x146a1f93d3e815b2!8m2!3d-6.9174639!4d107.6191228'));
+                        },
+                        child: Image.asset(
+                          "assets/image/btn_map.png",
+                          width: 40,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                // NOTE: BUTTON
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: edge),
+                  child: Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width - (2*edge),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _launchUrl(Uri.parse('tel:+6282117295505'));
+                      },
+                      child: Text(
+                        "Book Now",
+                        style: whiteTextStyle.copyWith(fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: purpleColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(17))),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
                 )
               ],
+            ),
+           Padding(
+              padding: EdgeInsets.symmetric(horizontal: edge, vertical: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Image.asset(
+                        "assets/image/btn_back.png",
+                        width: 40,
+                      )),
+                  Image.asset(
+                    "assets/image/btn_wishlist.png",
+                    width: 40,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
