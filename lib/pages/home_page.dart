@@ -1,18 +1,22 @@
 import 'package:find_house/models/city.dart';
 import 'package:find_house/models/space.dart';
 import 'package:find_house/models/tips.dart';
+import 'package:find_house/providers/space_provider.dart';
 import 'package:find_house/theme.dart';
 import 'package:find_house/widgets/bottom_navbar_item.dart';
 import 'package:find_house/widgets/city_card.dart';
 import 'package:find_house/widgets/space_card.dart';
 import 'package:find_house/widgets/tips_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var spaceProvider = Provider.of<SpaceProvider>(context);
+
     return Scaffold(
       body: SafeArea(
           bottom: false,
@@ -104,43 +108,28 @@ class HomePage extends StatelessWidget {
               height: 16,
             ),
             Padding(
-              padding: EdgeInsets.only(left: edge),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SpaceCard(Space(
-                      id: 1,
-                      imageUrl: "assets/image/space1.png",
-                      name: "Kuretakeso Hott",
-                      price: 53,
-                      rating: 4,
-                      city: "Bandung",
-                      country: "Germany")),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  SpaceCard(Space(
-                      id: 2,
-                      imageUrl: "assets/image/space2.png",
-                      name: "Roemah Nenek",
-                      price: 11,
-                      rating: 5,
-                      city: "Seattle",
-                      country: "Bogor")),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  SpaceCard(Space(
-                      id: 3,
-                      imageUrl: "assets/image/space3.png",
-                      name: "Darling How",
-                      price: 20,
-                      rating: 3,
-                      city: "Jakarta",
-                      country: "Indonesia"))
-                ],
-              ),
-            ),
+                padding: EdgeInsets.only(left: edge),
+                child: FutureBuilder(
+                    future: spaceProvider.getRecommendedSpace(),
+                    builder: ((BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        List<Space> datas = snapshot.data;
+                        int index = 0;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: datas.map(((item) {
+                            index++;
+                            return Container(
+                              margin: EdgeInsets.only(top: index == 1 ? 0 : 30),
+                              child: SpaceCard(item),
+                            );
+                          })).toList(),
+                        );
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }))),
             SizedBox(
               height: 30,
             ),
@@ -175,40 +164,38 @@ class HomePage extends StatelessWidget {
                   ],
                 )),
             SizedBox(
-              height: 70+edge,
+              height: 70 + edge,
             ),
           ])),
-          floatingActionButton: Container(
-                height: 65,
-                width: MediaQuery.of(context).size.width - (2 * edge),
-                margin: EdgeInsets.symmetric(horizontal: edge),
-                decoration: BoxDecoration(
-                  color: Color(0xffF6F7F8),
-                  borderRadius: BorderRadius.circular(23)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    BottomNavbar(
-                      imgUrl: 'assets/image/Icon_home_solid.png',
-                      isActive: true,
-                    ),
-                    BottomNavbar(
-                      imgUrl: 'assets/image/Icon_mail_solid.png',
-                      isActive: false,
-                    ),
-                    BottomNavbar(
-                      imgUrl: 'assets/image/Icon_card_solid.png',
-                      isActive: false,
-                    ),
-                    BottomNavbar(
-                      imgUrl: 'assets/image/Icon_love_solid.png',
-                      isActive: false,
-                    ),
-                  ],
-                ),
-              ),
-              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Container(
+        height: 65,
+        width: MediaQuery.of(context).size.width - (2 * edge),
+        margin: EdgeInsets.symmetric(horizontal: edge),
+        decoration: BoxDecoration(
+            color: Color(0xffF6F7F8), borderRadius: BorderRadius.circular(23)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            BottomNavbar(
+              imgUrl: 'assets/image/Icon_home_solid.png',
+              isActive: true,
+            ),
+            BottomNavbar(
+              imgUrl: 'assets/image/Icon_mail_solid.png',
+              isActive: false,
+            ),
+            BottomNavbar(
+              imgUrl: 'assets/image/Icon_card_solid.png',
+              isActive: false,
+            ),
+            BottomNavbar(
+              imgUrl: 'assets/image/Icon_love_solid.png',
+              isActive: false,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

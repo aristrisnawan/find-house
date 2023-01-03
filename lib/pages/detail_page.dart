@@ -1,3 +1,4 @@
+import 'package:find_house/pages/error_page.dart';
 import 'package:find_house/theme.dart';
 import 'package:find_house/widgets/facility_item.dart';
 import 'package:flutter/material.dart';
@@ -5,13 +6,16 @@ import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});
-  Future<void> _launchUrl(Uri url) async {
-  if (!await launchUrl(url)) {
-    throw 'Could not launch $url';
-  }
-}
+
   @override
   Widget build(BuildContext context) {
+    Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      // await launchUrl(url);
+      Navigator.push(context, MaterialPageRoute(builder: ((context) => ErrorPage())));
+      // throw 'Could not launch $url';
+    }
+  }
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -229,7 +233,8 @@ class DetailPage extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          _launchUrl(Uri.parse('https://www.google.co.id/maps/place/Bandung,+Kota+Bandung,+Jawa+Barat/@-6.9032739,107.5729445,12z/data=!3m1!4b1!4m5!3m4!1s0x2e68e6398252477f:0x146a1f93d3e815b2!8m2!3d-6.9174639!4d107.6191228'));
+                          _launchUrl(Uri.parse(
+                              'https://www.google.co.id/maps/place/Bandung,+Kota+Bandung,+Jawa+Barat/@-6.9032739,107.5729445,12z/data=!3m1!4b1!4m5!3m4!1s0x2e68e6398252477f:0x146a1f93d3e815b2!8m2!3d-6.9174639!4d107.6191228'));
                         },
                         child: Image.asset(
                           "assets/image/btn_map.png",
@@ -247,7 +252,7 @@ class DetailPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: edge),
                   child: Container(
                     height: 50,
-                    width: MediaQuery.of(context).size.width - (2*edge),
+                    width: MediaQuery.of(context).size.width - (2 * edge),
                     child: ElevatedButton(
                       onPressed: () {
                         _launchUrl(Uri.parse('tel:+6282117295505'));
@@ -268,7 +273,7 @@ class DetailPage extends StatelessWidget {
                 )
               ],
             ),
-           Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: edge, vertical: 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
