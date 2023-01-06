@@ -1,29 +1,35 @@
+import 'package:find_house/models/space.dart';
 import 'package:find_house/pages/error_page.dart';
 import 'package:find_house/theme.dart';
 import 'package:find_house/widgets/facility_item.dart';
+import 'package:find_house/widgets/rating_item.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+  final Space space;
+
+  const DetailPage(this.space);
 
   @override
   Widget build(BuildContext context) {
     Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url)) {
-      // await launchUrl(url);
-      Navigator.push(context, MaterialPageRoute(builder: ((context) => ErrorPage())));
-      // throw 'Could not launch $url';
+      if (!await launchUrl(url)) {
+        // await launchUrl(url);
+        Navigator.push(
+            context, MaterialPageRoute(builder: ((context) => ErrorPage())));
+        // throw 'Could not launch $url';
+      }
     }
-  }
+
     return Scaffold(
       body: SafeArea(
         bottom: false,
         child: Stack(
           children: [
             // NOTE : THUMBNAIL
-            Image.asset(
-              "assets/image/pic.png",
+            Image.network(
+              space.imageUrl,
               height: 350,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
@@ -53,7 +59,7 @@ class DetailPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Kuretakeso Hott",
+                                  space.name,
                                   style: blackTextStyle.copyWith(fontSize: 22),
                                 ),
                                 SizedBox(
@@ -61,7 +67,7 @@ class DetailPage extends StatelessWidget {
                                 ),
                                 Text.rich(
                                   TextSpan(
-                                      text: "\$ 52",
+                                      text: "\$ ${space.price}",
                                       style: purpleTextStyle.copyWith(
                                           fontSize: 16),
                                       children: [
@@ -74,38 +80,11 @@ class DetailPage extends StatelessWidget {
                               ],
                             ),
                             Row(
-                              children: [
-                                Image.asset(
-                                  "assets/image/Icon_star_solid.png",
-                                  width: 20,
-                                ),
-                                SizedBox(
-                                  height: 2,
-                                ),
-                                Image.asset(
-                                  "assets/image/Icon_star_solid.png",
-                                  width: 20,
-                                ),
-                                SizedBox(
-                                  height: 2,
-                                ),
-                                Image.asset(
-                                  "assets/image/Icon_star_solid.png",
-                                  width: 20,
-                                ),
-                                Image.asset(
-                                  "assets/image/Icon_star_solid.png",
-                                  width: 20,
-                                ),
-                                SizedBox(
-                                  height: 2,
-                                ),
-                                Image.asset(
-                                  "assets/image/Icon_star_solid.png",
-                                  width: 20,
-                                  color: Color(0xff989BA1),
-                                ),
-                              ],
+                              children: [1, 2, 3, 4, 5].map((item) {
+                                return Container(
+                                    margin: EdgeInsets.only(left: 2),
+                                    child: RatingItem(item, space.rating));
+                              }).toList(),
                             )
                           ],
                         ),
@@ -131,17 +110,17 @@ class DetailPage extends StatelessWidget {
                                 id: 1,
                                 imageUrl: "assets/image/icon_kitchen.png",
                                 name: "Kitchen",
-                                count: 2),
+                                count: space.numberOfKitchen),
                             FacilityItem(
                                 id: 2,
                                 imageUrl: "assets/image/icon_bedroom.png",
                                 name: "Bedroom",
-                                count: 3),
+                                count: space.numberOfBedroom),
                             FacilityItem(
                                 id: 3,
                                 imageUrl: "assets/image/icon_cupboard.png",
                                 name: "Big Lemari",
-                                count: 3),
+                                count: space.numberOfCupboards),
                           ],
                         ),
                       ),
@@ -165,43 +144,27 @@ class DetailPage extends StatelessWidget {
                           height: 88,
                           width: MediaQuery.of(context).size.width,
                           child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Image.asset(
-                                  "assets/image/photo1.png",
-                                  width: 110,
-                                  height: 88,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 18,
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Image.asset(
-                                  "assets/image/photo2.png",
-                                  width: 110,
-                                  height: 88,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 18,
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Image.asset(
-                                  "assets/image/photo3.png",
-                                  width: 110,
-                                  height: 88,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ],
-                          ),
+                              scrollDirection: Axis.horizontal,
+                              children: space.photos.map((item) {
+                                int index = 0;
+                                        print(item);
+                                return ClipRRect(
+                                  child: Container(
+                                    height: 110,
+                                    width: 88,
+                                    margin: EdgeInsets.only(left: edge),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.network(
+                                        item,
+                                        width: 110,
+                                        height: 88,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList()),
                         ),
                       )
                     ],
@@ -227,14 +190,13 @@ class DetailPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Jln. Kappan Sukses No. 20 \nBandung",
+                        "${space.address} \n${space.city}",
                         style: reulerTextStyle.copyWith(
                             fontSize: 14, color: Color(0xff7A7E86)),
                       ),
                       InkWell(
                         onTap: () {
-                          _launchUrl(Uri.parse(
-                              'https://www.google.co.id/maps/place/Bandung,+Kota+Bandung,+Jawa+Barat/@-6.9032739,107.5729445,12z/data=!3m1!4b1!4m5!3m4!1s0x2e68e6398252477f:0x146a1f93d3e815b2!8m2!3d-6.9174639!4d107.6191228'));
+                          _launchUrl(Uri.parse(space.mapUrl));
                         },
                         child: Image.asset(
                           "assets/image/btn_map.png",
@@ -255,7 +217,7 @@ class DetailPage extends StatelessWidget {
                     width: MediaQuery.of(context).size.width - (2 * edge),
                     child: ElevatedButton(
                       onPressed: () {
-                        _launchUrl(Uri.parse('tel:+6282117295505'));
+                        _launchUrl(Uri.parse('tel:${space.phone}'));
                       },
                       child: Text(
                         "Book Now",
