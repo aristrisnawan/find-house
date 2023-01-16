@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:find_house/models/space.dart';
 import 'package:find_house/pages/error_page.dart';
 import 'package:find_house/theme.dart';
@@ -6,11 +8,17 @@ import 'package:find_house/widgets/rating_item.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final Space space;
 
   const DetailPage(this.space);
 
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     Future<void> _launchUrl(Uri url) async {
@@ -29,7 +37,7 @@ class DetailPage extends StatelessWidget {
           children: [
             // NOTE : THUMBNAIL
             Image.network(
-              space.imageUrl,
+              widget.space.imageUrl,
               height: 350,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
@@ -59,7 +67,7 @@ class DetailPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  space.name,
+                                  widget.space.name,
                                   style: blackTextStyle.copyWith(fontSize: 22),
                                 ),
                                 SizedBox(
@@ -67,7 +75,7 @@ class DetailPage extends StatelessWidget {
                                 ),
                                 Text.rich(
                                   TextSpan(
-                                      text: "\$ ${space.price}",
+                                      text: "\$ ${widget.space.price}",
                                       style: purpleTextStyle.copyWith(
                                           fontSize: 16),
                                       children: [
@@ -83,7 +91,8 @@ class DetailPage extends StatelessWidget {
                               children: [1, 2, 3, 4, 5].map((item) {
                                 return Container(
                                     margin: EdgeInsets.only(left: 2),
-                                    child: RatingItem(item, space.rating));
+                                    child:
+                                        RatingItem(item, widget.space.rating));
                               }).toList(),
                             )
                           ],
@@ -110,17 +119,17 @@ class DetailPage extends StatelessWidget {
                                 id: 1,
                                 imageUrl: "assets/image/icon_kitchen.png",
                                 name: "Kitchen",
-                                count: space.numberOfKitchen),
+                                count: widget.space.numberOfKitchen),
                             FacilityItem(
                                 id: 2,
                                 imageUrl: "assets/image/icon_bedroom.png",
                                 name: "Bedroom",
-                                count: space.numberOfBedroom),
+                                count: widget.space.numberOfBedroom),
                             FacilityItem(
                                 id: 3,
                                 imageUrl: "assets/image/icon_cupboard.png",
                                 name: "Big Lemari",
-                                count: space.numberOfCupboards),
+                                count: widget.space.numberOfCupboards),
                           ],
                         ),
                       ),
@@ -145,9 +154,9 @@ class DetailPage extends StatelessWidget {
                           width: MediaQuery.of(context).size.width,
                           child: ListView(
                               scrollDirection: Axis.horizontal,
-                              children: space.photos.map((item) {
+                              children: widget.space.photos.map((item) {
                                 int index = 0;
-                                        print(item);
+                                print(item);
                                 return ClipRRect(
                                   child: Container(
                                     height: 110,
@@ -190,13 +199,13 @@ class DetailPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${space.address} \n${space.city}",
+                        "${widget.space.address} \n${widget.space.city}",
                         style: reulerTextStyle.copyWith(
                             fontSize: 14, color: Color(0xff7A7E86)),
                       ),
                       InkWell(
                         onTap: () {
-                          _launchUrl(Uri.parse(space.mapUrl));
+                          _launchUrl(Uri.parse(widget.space.mapUrl));
                         },
                         child: Image.asset(
                           "assets/image/btn_map.png",
@@ -217,7 +226,7 @@ class DetailPage extends StatelessWidget {
                     width: MediaQuery.of(context).size.width - (2 * edge),
                     child: ElevatedButton(
                       onPressed: () {
-                        _launchUrl(Uri.parse('tel:${space.phone}'));
+                        _launchUrl(Uri.parse('tel:${widget.space.phone}'));
                       },
                       child: Text(
                         "Book Now",
@@ -248,9 +257,18 @@ class DetailPage extends StatelessWidget {
                         "assets/image/btn_back.png",
                         width: 40,
                       )),
-                  Image.asset(
-                    "assets/image/btn_wishlist.png",
-                    width: 40,
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        isChecked = !isChecked;
+                      });
+                    },
+                    child: Image.asset(
+                      isChecked
+                          ? "assets/image/btn_wishlist_orange.png"
+                          : "assets/image/btn_wishlist.png",
+                      width: 40,
+                    ),
                   ),
                 ],
               ),
