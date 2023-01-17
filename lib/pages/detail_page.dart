@@ -30,6 +30,28 @@ class _DetailPageState extends State<DetailPage> {
       }
     }
 
+    // NOTE : Alert Dialog
+    Future<void> showConfirmation() async {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                title: Text("Konfirmasi"),
+                content:
+                    Text("Apakah kamu ingin menghubungi pemilik kos?"),
+                actions: [
+                  TextButton(
+                      onPressed: (() => Navigator.pop(context, 'Tidak')),
+                      child: Text("Tidak")),
+                  TextButton(
+                      onPressed: (() {
+                        Navigator.pop(context, 'Tidak');
+                        _launchUrl(Uri.parse('tel:${widget.space.phone}'));
+                      }),
+                      child: Text("Ya"))
+                ],
+              ));
+    }
+
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -218,16 +240,14 @@ class _DetailPageState extends State<DetailPage> {
                 SizedBox(
                   height: 40,
                 ),
-                // NOTE: BUTTON
+                // NOTE: BUTTON BOOK NOW
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: edge),
                   child: Container(
                     height: 50,
                     width: MediaQuery.of(context).size.width - (2 * edge),
                     child: ElevatedButton(
-                      onPressed: () {
-                        _launchUrl(Uri.parse('tel:${widget.space.phone}'));
-                      },
+                      onPressed: () => showConfirmation(),
                       child: Text(
                         "Book Now",
                         style: whiteTextStyle.copyWith(fontSize: 18),
